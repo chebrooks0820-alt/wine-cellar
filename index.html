@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2A0C17">
+<title>The People’s Wine Cellar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,400&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cellar:#2A0C17; --sheet:#43182A; --gold:#C8A24D; --gold-soft:#E8D08F;
+  --paper:#F3EAD6; --ink:#2E1520; --ink-soft:#6B4A55; --cream:#F7EEDF; --burgundy:#8E2347;
+  --serif:"Fraunces", Georgia, "Times New Roman", serif;
+  --sans:"Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;min-height:100dvh;background:var(--cellar);color:var(--cream);font:400 18px/1.45 var(--sans)}
+button{font-family:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:3px solid var(--gold-soft);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:520px;margin:0 auto;padding:0 18px}
+.wrap.wide{max-width:1100px}
+.top{padding-top:calc(28px + env(safe-area-inset-top,0px))}
+
+/* preview banner */
+.demo{background:#1A060E;color:var(--gold-soft);font-size:14px;text-align:center;padding:calc(6px + env(safe-area-inset-top,0px)) 12px 6px}
+
+/* home */
+.house{font:700 46px/1.02 var(--serif);color:var(--gold-soft);margin:0 0 14px}
+.house::after{content:"";display:block;width:64px;height:3px;background:var(--gold);margin-top:16px}
+.tagline{font-size:19px;margin:0 0 24px;max-width:34ch}
+.cards{display:grid;gap:12px}
+.card{position:relative;display:block;width:100%;text-align:left;border:0;border-radius:6px;background:var(--paper);color:var(--ink);padding:16px 18px 16px 32px;min-height:92px;overflow:hidden}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:14px;background:var(--band)}
+.card::after{content:"";position:absolute;inset:5px 5px 5px 20px;border:1px solid rgba(200,162,77,.85);border-radius:3px;pointer-events:none}
+.card-t{display:block;font:700 26px/1.1 var(--serif)}
+.card-n{display:block;font:italic 400 16px/1.3 var(--serif);color:var(--burgundy);margin-top:2px}
+.card-d{display:block;font-size:15px;color:var(--ink-soft);margin-top:6px}
+.card:active{transform:scale(.99)}
+.textbtn{display:block;margin:18px auto 0;min-height:48px;padding:0 18px;background:none;border:1.5px solid var(--gold);border-radius:12px;color:var(--gold-soft);font:600 17px var(--sans)}
+.foot{font-size:15px;color:var(--gold-soft);text-align:center;margin:28px 0 40px;padding-bottom:env(safe-area-inset-bottom,0px)}
+
+/* top bar */
+.bar{position:sticky;top:0;z-index:6;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;background:var(--cellar);padding:env(safe-area-inset-top,0px) 10px 0}
+.link{min-height:48px;background:none;border:0;color:var(--gold-soft);font:600 17px var(--sans);padding:0 8px;display:inline-flex;align-items:center;gap:2px}
+.link.right{justify-self:end}
+.link[disabled]{opacity:.35;cursor:default}
+.bar-title{font:700 19px var(--serif);color:var(--cream)}
+.spacer{display:block}
+.dots{display:flex;justify-content:center}
+.dot{width:28px;height:48px;background:none;border:0;display:inline-flex;align-items:center;justify-content:center;padding:0}
+.dot span{display:block;width:12px;height:12px;border-radius:50%;border:2px solid var(--gold)}
+.dot.done span{background:var(--gold)}
+.dot.cur span{box-shadow:0 0 0 3px var(--cellar),0 0 0 5px var(--cream)}
+
+/* the label */
+.stage{padding-top:10px}
+.label{position:relative;background:var(--paper);color:var(--ink);border-radius:4px;padding:22px 22px 18px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.label::before{content:"";position:absolute;inset:7px;border:1px solid var(--gold);border-radius:2px;pointer-events:none}
+.label::after{content:"";position:absolute;inset:11px;border:1px solid rgba(200,162,77,.45);pointer-events:none}
+.label-house{font:500 14px var(--serif);color:var(--ink-soft)}
+.label-band{width:56px;height:4px;border-radius:2px;background:var(--band);margin:8px auto 12px}
+.line{margin:0 0 10px;padding:2px 4px;border-radius:4px}
+.lq{font-style:italic;font-size:14px;color:var(--ink-soft)}
+.la{font:500 19px/1.25 var(--serif);overflow-wrap:anywhere}
+.la.blank{height:24px;border-bottom:1.5px dotted rgba(46,21,32,.4);margin:0 18px}
+.line.active .lq{color:var(--burgundy);font-weight:600}
+.line.active .la.blank,.line.active .label-title.empty{border-color:var(--gold)}
+.label-title{font:700 31px/1.1 var(--serif);margin:3px 0 4px;overflow-wrap:anywhere}
+.label-title.empty{font-weight:500;font-style:italic;font-size:24px;color:rgba(46,21,32,.32);border-bottom:1.5px dotted rgba(46,21,32,.4);display:inline-block;padding:0 12px 2px}
+.label-kind{font:italic 400 16px var(--serif);color:var(--burgundy);margin:0 0 14px}
+.label-foot{margin-top:14px;font-size:13px;color:var(--ink-soft)}
+.bottled{min-height:19px;font:italic 400 15px var(--serif);color:var(--ink)}
+.line.just{animation:ink .9s ease-out}
+@keyframes ink{from{background:rgba(200,162,77,.55)}to{background:rgba(200,162,77,0)}}
+.label.compact{padding:18px 16px 14px}
+.compact .label-title{font-size:25px}
+.compact .la{font-size:17px}
+
+/* bottom sheet */
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:5;background:var(--sheet);border-top:1px solid var(--gold);padding:14px 16px calc(14px + env(safe-area-inset-bottom,0px));max-height:62vh;overflow:auto}
+.sheet-inner{max-width:520px;margin:0 auto}
+.q{font:700 22px/1.2 var(--serif);margin:0 0 10px;color:var(--cream)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{min-height:52px;padding:10px 16px;border-radius:14px;border:1.5px solid var(--gold);background:transparent;color:var(--cream);font:600 17px/1.2 var(--sans);text-align:left}
+.chip[aria-pressed="true"]{background:var(--gold);color:var(--ink)}
+.chip.own{border-style:dashed;color:var(--gold-soft)}
+.actions{display:flex;justify-content:space-between;gap:10px;margin-top:12px}
+.ghost{min-height:48px;padding:0 14px;border:0;background:none;color:var(--gold-soft);font:600 17px var(--sans)}
+.ownrow{display:flex;gap:8px;margin-top:12px}
+.ownrow input{flex:1}
+.small{width:auto;min-height:56px;margin:0;padding:0 20px}
+
+/* forms */
+label{display:block;font-weight:600;margin:16px 0 6px}
+input[type=text],input[type=tel],input[type=email],input[type=search]{width:100%;min-height:56px;padding:12px 14px;border-radius:10px;border:2px solid transparent;background:var(--cream);color:var(--ink);font:500 18px var(--sans)}
+input[aria-invalid="true"]{border-color:#FF8A7A}
+.err{color:#FFB4A8;font-size:15px;margin-top:6px}
+.err:empty{display:none}
+.fieldhead{font-weight:600;margin:22px 0 10px}
+.seg{display:flex;gap:8px;margin:0 0 10px}
+.seg button{flex:1;min-height:52px;border-radius:12px;border:1.5px solid var(--gold);background:transparent;color:var(--cream);font:600 17px var(--sans)}
+.seg button[aria-pressed="true"]{background:var(--gold);color:var(--ink)}
+.check{display:flex;gap:12px;align-items:flex-start;font-weight:500;margin-top:20px}
+.check input{width:26px;height:26px;accent-color:var(--gold);flex:none;margin:1px 0 0}
+.primary{display:block;width:100%;min-height:58px;border:0;border-radius:12px;background:var(--gold);color:var(--ink);font:700 19px var(--sans);margin-top:22px}
+.primary[disabled]{opacity:.6}
+.secondary{display:block;width:100%;min-height:54px;border:1.5px solid var(--gold);border-radius:12px;background:transparent;color:var(--gold-soft);font:600 18px var(--sans);margin-top:12px}
+.fine{font-size:14px;color:var(--gold-soft);margin:14px 0 0}
+.finish{padding-top:10px;padding-bottom:calc(40px + env(safe-area-inset-bottom,0px))}
+.finish form{margin-top:26px}
+
+/* done */
+.big{font:700 38px/1.08 var(--serif);color:var(--gold-soft);margin:0 0 10px}
+.done-note{margin:0 0 12px}
+.done .label{margin:22px 0}
+.done{padding-bottom:calc(40px + env(safe-area-inset-bottom,0px))}
+
+/* wall */
+.wall-h{font:700 38px/1.05 var(--serif);color:var(--gold-soft);margin:18px 0 6px}
+.wall-sub{margin:0 0 16px;max-width:44ch}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 10px}
+.fchip{min-height:46px;padding:8px 16px;border-radius:999px;border:1.5px solid var(--gold);background:transparent;color:var(--cream);font:600 16px var(--sans)}
+.fchip[aria-pressed="true"]{background:var(--gold);color:var(--ink)}
+.count{color:var(--gold-soft);font-size:15px;margin:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px;margin:14px 0 40px;padding-bottom:env(safe-area-inset-bottom,0px)}
+.empty{grid-column:1/-1;color:var(--gold-soft)}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+<noscript><p class="wrap top">This game needs JavaScript. Please open it in your phone’s regular browser.</p></noscript>
+
+<script>
+(function(){
+'use strict';
+
+/* ---------- settings ---------- */
+// Paste your Cognito form's public link here (Publish page, "Share a link"), for example:
+// 'https://www.cognitoforms.com/YourOrg/PeoplesWineCellar'
+// While this is empty the page runs in preview mode and sends nothing.
+const COGNITO_FORM_URL = '';
+// Add ?preview to the web address to force preview mode on the live site for testing.
+const LIVE = !!COGNITO_FORM_URL && !new URLSearchParams(location.search).has('preview');
+// Set to false after you replace WALL_DATA below with real labels.
+const SAMPLE_WALL = true;
+
+/* ---------- content (from Kara’s draft; extra choices added to reach 5 or 6 per prompt) ---------- */
+const CATS = [
+  { id:'funny', short:'Funny', name:'The Unfiltered Vintage', color:'#E08CA0', titleIdx:0, ph:'Your wine’s name',
+    tag:'For the funny, sarcastic, slightly questionable wine.',
+    prompts:[
+      { q:'My wine would be called…', chips:['Cabernet of Consequences','Just One More','Prosecco & Poor Decisions','Pinot Noir Regrets','Merlot Mayhem','Rosé All Day'] },
+      { q:'A word to describe it', chips:['chaotic','fancy','bold','questionable','smooth','unhinged'] },
+      { q:'My wine pairs best with…', chips:['a night with no responsibilities','losing at Monopoly','someone else doing the dishes','a big bowl of popcorn','good gossip','a very long nap'] },
+      { q:'My wine’s tasting notes include…', chips:['hints of chaos','a bold finish of sarcasm','notes of “I deserve this”','a touch of regret','zero self-control'] },
+      { q:'Warning: best enjoyed when…', chips:['nobody’s watching','the kids are asleep','it’s been a week','the dishes can wait','you’re with friends who won’t tell'] }
+    ]},
+  { id:'memories', short:'Memories', name:'The Memory Maker', color:'#D8B45A', titleIdx:0, ph:'Your moment',
+    tag:'Some moments are worth bottling forever.',
+    prompts:[
+      { q:'A moment I’d bottle forever…', chips:['a family vacation','my wedding day','a favorite holiday','a perfect summer night','a Friday night game','a lazy Sunday morning'] },
+      { q:'A place that feels like home…', chips:['the lake','Grandma’s kitchen','my hometown','right here in Montana','the front porch','the family farm'] },
+      { q:'I’d share this bottle with…', chips:['my best friend','my family','my neighbors','the whole table','someone I miss','anyone with a good story'] },
+      { q:'This bottle reminds me of…', chips:['Sunday dinners','summer nights','laughing until it hurts','the people who raised me','home','a song I can’t forget'] }
+    ]},
+  { id:'people', short:'People', name:'The People Person', color:'#8E2347', titleIdx:3, ph:'Your bottle’s name',
+    tag:'Because life is better with good people around the table.',
+    prompts:[
+      { q:'I’d raise a glass to…', chips:['my spouse','my kids','my best friend','a teacher','a healthcare hero','someone I miss'] },
+      { q:'They deserve a toast because…', chips:['they always show up','they make everyone feel welcome','they’ve been there through it all','they make me laugh','they never give up','they make this place better'] },
+      { q:'If they were a wine, they’d be…', chips:['sweet & bubbly','strong & bold','smooth & comforting','a little dry','unforgettable'] },
+      { q:'Our bottle would be called…', chips:['The Good Stuff','Forever Friends','Family Reserve','The Real MVP','Heart of the Table','Cheers to You'] },
+      { q:'Their signature phrase is…', chips:['“Come on in, there’s plenty”','“Let’s do it anyway”','“Who needs a refill?”','“Trust me on this”','“I’m just saying…”'] }
+    ]},
+  { id:'community', short:'Community', name:'The Community Spirit', color:'#0B5500', titleIdx:2, ph:'Your word',
+    tag:'What makes our community worth celebrating?',
+    prompts:[
+      { q:'I’m grateful for…', chips:['healthcare close to home','small-town kindness','people who care for one another','local healthcare heroes','wide open Montana skies','neighbors who show up'] },
+      { q:'One thing I hope for our community…', chips:['a healthy future','stronger families','growing healthcare services','opportunities for the next generation','more good days together'] },
+      { q:'A word that describes our community…', chips:['resilient','caring','generous','welcoming','tough','close-knit'] },
+      { q:'Something worth investing in…', chips:['local healthcare','our kids','the future of our community','each other','caring for our neighbors'] }
+    ]}
+];
+
+// Sample labels for the preview wall. After the event, replace this list with the
+// exported labels that guests chose to show (answers and first names only, never contact info).
+// Each item: { cat, name, a: { promptNumber: answer } } where promptNumber starts at 0.
+const WALL_DATA = [
+  { cat:'funny', name:'Dana', a:{0:'Cabernet of Consequences',1:'questionable',2:'someone else doing the dishes',4:'it’s been a week'} },
+  { cat:'memories', name:'Walt', a:{0:'a perfect summer night',1:'the lake',2:'my best friend'} },
+  { cat:'people', name:'Jo', a:{0:'a healthcare hero',1:'they make everyone feel welcome',2:'smooth & comforting',3:'Heart of the Table'} },
+  { cat:'community', name:'Marcy', a:{0:'small-town kindness',1:'stronger families',2:'generous',3:'our kids'} },
+  { cat:'funny', name:'T.R.', a:{0:'Just One More',1:'bold',3:'notes of “I deserve this”',4:'nobody’s watching'} },
+  { cat:'memories', name:'Priya', a:{0:'my wedding day',1:'Grandma’s kitchen',3:'Sunday dinners'} },
+  { cat:'people', name:'Lou', a:{0:'my spouse',1:'they always show up',2:'strong & bold',3:'The Real MVP',4:'“Come on in, there’s plenty”'} },
+  { cat:'community', name:'Sam', a:{0:'local healthcare heroes',2:'resilient',3:'local healthcare'} }
+];
+
+/* ---------- state ---------- */
+const app = document.getElementById('app');
+const S = { screen:'home', cat:null, step:0, a:{}, own:{}, adding:false, just:null, done:null };
+let wallItems = WALL_DATA.slice();
+let wallFilter = 'all', wallQuery = '';
+let timer = null;
+const smooth = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+const cat = () => CATS.find(c => c.id === S.cat);
+const chev = '<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const demoBanner = () => LIVE ? '' : '<div class="demo">Preview mode. Nothing you enter here is saved or sent.</div>';
+
+/* ---------- the wine label ---------- */
+function labelHTML(c, a, o){
+  o = o || {};
+  const t = c.titleIdx, tv = a[t];
+  const tcls = ['line']; if (o.active === t) tcls.push('active'); if (o.just === t) tcls.push('just');
+  const lines = c.prompts.map((p, i) => {
+    if (i === t) return '';
+    const v = a[i];
+    if (o.wall && v == null) return '';
+    const cls = ['line']; if (o.active === i) cls.push('active'); if (o.just === i) cls.push('just');
+    return '<div class="' + cls.join(' ') + '"><div class="lq">' + esc(p.q) + '</div>' +
+      (v != null ? '<div class="la">' + esc(cap(v)) + '</div>' : '<div class="la blank" aria-hidden="true"></div>') + '</div>';
+  }).join('');
+  return '<div class="label' + (o.compact ? ' compact' : '') + '" style="--band:' + c.color + '">' +
+    '<div class="label-house">The People’s Wine Cellar</div><div class="label-band"></div>' +
+    '<div class="' + tcls.join(' ') + '"><div class="lq">' + esc(c.prompts[t].q) + '</div>' +
+      '<div class="label-title' + (tv == null ? ' empty' : '') + '">' + (tv != null ? esc(cap(tv)) : esc(c.ph)) + '</div></div>' +
+    '<div class="label-kind">' + esc(c.name) + '</div>' + lines +
+    '<div class="label-foot">Vintage 2026, Sidney, Montana<div class="bottled">' + (o.name ? 'Bottled by ' + esc(o.name) : '') + '</div></div></div>';
+}
+
+/* ---------- screens ---------- */
+function go(s){ S.screen = s; render(); window.scrollTo(0, 0); }
+function render(){ ({home:renderHome, build:renderBuild, finish:renderFinish, done:renderDone, wall:renderWall})[S.screen](); }
+
+function renderHome(){
+  app.innerHTML = demoBanner() +
+  '<main class="wrap top">' +
+    '<h1 class="house">The People’s Wine Cellar</h1>' +
+    '<p class="tagline">Every bottle tells a story. Pick the label that fits your mood, then tap your answers. No typing needed.</p>' +
+    '<div class="cards">' + CATS.map(c =>
+      '<button class="card" style="--band:' + c.color + '" data-act="pickCat" data-id="' + c.id + '">' +
+      '<span class="card-t">' + esc(c.short) + '</span><span class="card-n">' + esc(c.name) + '</span>' +
+      '<span class="card-d">' + esc(c.tag) + '</span></button>').join('') + '</div>' +
+    '<button class="textbtn" data-act="wall">See the wall</button>' +
+    '<p class="foot">Wine &amp; Food Festival, Game Night 2026<br>Cheers to our community and the next chapter of local healthcare.</p>' +
+  '</main>';
+}
+
+function renderBuild(){
+  const c = cat(), n = c.prompts.length, p = c.prompts[S.step];
+  const answered = Object.keys(S.a).length;
+  app.innerHTML = demoBanner() +
+  '<div class="bar"><button class="link" data-act="back">' + chev + 'Back</button>' +
+    '<div class="dots" role="group" aria-label="Prompts">' + c.prompts.map((_, i) =>
+      '<button class="dot' + (i === S.step ? ' cur' : '') + (S.a[i] != null ? ' done' : '') + '" data-act="goStep" data-i="' + i +
+      '" aria-label="Prompt ' + (i + 1) + ' of ' + n + '"' + (i === S.step ? ' aria-current="step"' : '') + '><span></span></button>').join('') + '</div>' +
+    '<button class="link right" data-act="finish"' + (answered ? '' : ' disabled') + '>Finish</button></div>' +
+  '<main class="wrap stage" id="stage">' + labelHTML(c, S.a, {active:S.step, just:S.just}) + '</main>' +
+  '<section class="sheet" id="sheet" aria-label="Choose an answer"><div class="sheet-inner">' +
+    '<h2 class="q">' + esc(p.q) + '</h2>' +
+    '<div class="chips">' + p.chips.map(v =>
+      '<button class="chip" data-act="chip" data-v="' + esc(v) + '" aria-pressed="' + (S.a[S.step] === v) + '">' + esc(v) + '</button>').join('') +
+      '<button class="chip own" data-act="own" aria-expanded="' + S.adding + '">Write my own</button></div>' +
+    (S.adding ? '<div class="ownrow"><label class="sr" for="ownText">Your own words</label>' +
+      '<input id="ownText" type="text" maxlength="40" placeholder="Type it here" autocomplete="off">' +
+      '<button class="primary small" data-act="addOwn">Add</button></div>' : '') +
+    '<div class="actions"><button class="ghost" data-act="surprise">🎲 Surprise me</button><button class="ghost" data-act="skip">Skip</button></div>' +
+  '</div></section>';
+  if (S.adding) { const f = document.getElementById('ownText'); if (f) f.focus(); }
+  fit();
+}
+
+function fit(){
+  const s = document.getElementById('sheet'), st = document.getElementById('stage');
+  if (!s || !st) return;
+  st.style.paddingBottom = (s.offsetHeight + 24) + 'px';
+  const el = st.querySelector('.line.active'); if (!el) return;
+  const r = el.getBoundingClientRect(), sheetTop = s.getBoundingClientRect().top,
+        barB = document.querySelector('.bar').getBoundingClientRect().bottom;
+  if (r.bottom > sheetTop - 12) window.scrollBy({top: r.bottom - sheetTop + 28, behavior: smooth});
+  else if (r.top < barB + 8) window.scrollBy({top: r.top - barB - 28, behavior: smooth});
+}
+window.addEventListener('resize', fit);
+
+function apply(v, isOwn){
+  S.a[S.step] = v;
+  if (isOwn) S.own[S.step] = true; else delete S.own[S.step];
+  S.just = S.step; S.adding = false;
+  renderBuild();
+  clearTimeout(timer);
+  timer = setTimeout(() => { S.just = null; next(); }, 450);
+}
+function next(){
+  if (S.step < cat().prompts.length - 1) { S.step++; S.adding = false; renderBuild(); }
+  else go('finish');
+}
+
+function renderFinish(){
+  const c = cat();
+  app.innerHTML = demoBanner() +
+  '<div class="bar"><button class="link" data-act="back">' + chev + 'Back</button><div class="bar-title">Your bottle</div><span class="spacer"></span></div>' +
+  '<main class="wrap finish">' + labelHTML(c, S.a, {}) +
+    '<div class="handoff">' +
+      '<h2 class="q">One last step</h2>' +
+      '<p class="done-note">Add your name and, if you’d like to win a special prize, a phone number or email. Entering the raffle is optional.</p>' +
+      '<div class="err" id="eForm" role="alert"></div>' +
+      '<button class="primary" data-act="handoff">Add my name and finish</button>' +
+      (LIVE ? '' : '<p class="fine">Preview mode: on the live page this button opens your Cognito form with your label answers already filled in.</p>') +
+    '</div>' +
+  '</main>';
+}
+
+function handoff(){
+  const c = cat();
+  const answers = c.prompts.map((p, i) => ({q:p.q, a:S.a[i] || '', custom:!!S.own[i]})).filter(x => x.a);
+  if (!answers.length) { document.getElementById('eForm').textContent = 'Your label is empty. Tap Back and choose at least one answer.'; return; }
+  const title = S.a[c.titleIdx] || '';
+  S.done = {cat:c.id, a:Object.assign({}, S.a), title:title};
+  try { sessionStorage.setItem('pwc_last', JSON.stringify(S.done)); } catch (e) {}
+  if (!LIVE) { go('done'); return; }
+  const entry = {
+    Category:c.short,
+    LabelTitle:title,
+    LabelText:answers.map(x => x.q + ' ' + x.a).join(' | '),
+    HasWriteIn:answers.some(x => x.custom) ? 'Yes' : 'No'
+  };
+  location.href = COGNITO_FORM_URL + (COGNITO_FORM_URL.indexOf('?') === -1 ? '?' : '&') + 'entry=' + encodeURIComponent(JSON.stringify(entry));
+}
+
+function renderDone(){
+  const d = S.done, c = d && CATS.find(x => x.id === d.cat);
+  app.innerHTML = demoBanner() +
+  '<main class="wrap top done">' +
+    '<h1 class="big">You’re in!</h1>' +
+    '<p class="done-note">Your bottle is in the cellar. If you added a phone number or email, you’re entered to win a special prize.</p>' +
+    (c ? labelHTML(c, d.a, {}) : '') +
+    '<p class="done-note">Take a screenshot of your label and share it with #EveryBottleTellsAStory. Labels shared on the wall appear after the event.</p>' +
+    (navigator.share ? '<button class="primary" data-act="share">Share my bottle</button>' : '') +
+    '<button class="secondary" data-act="wall">See the wall</button>' +
+    '<button class="secondary" data-act="again">Make another bottle</button>' +
+  '</main>';
+}
+
+function renderWall(){
+  app.innerHTML = demoBanner() +
+  '<div class="bar"><button class="link" data-act="home">' + chev + 'Back</button><div class="bar-title">The Wall</div><span class="spacer"></span></div>' +
+  '<main class="wrap wide">' +
+    '<h1 class="wall-h">The People’s Wine Cellar</h1>' +
+    '<p class="wall-sub">Every bottle tells a story. Find yours by name, or browse by label.</p>' +
+    '<label class="sr" for="q">Find a label by name</label>' +
+    '<input id="q" type="search" placeholder="Find a label by name" autocomplete="off" value="' + esc(wallQuery) + '">' +
+    '<div class="filters" id="filters"></div>' +
+    '<p class="count" id="count" aria-live="polite"></p>' +
+    '<div class="grid" id="grid"></div>' +
+  '</main>';
+  paintWall();
+}
+
+function paintWall(){
+  const f = document.getElementById('filters'), g = document.getElementById('grid'), n = document.getElementById('count');
+  if (!g) return;
+  f.innerHTML = [{id:'all', short:'All'}].concat(CATS).map(c =>
+    '<button class="fchip" data-act="filter" data-id="' + c.id + '" aria-pressed="' + (wallFilter === c.id) + '">' + esc(c.short) + '</button>').join('');
+  const q = wallQuery.trim().toLowerCase();
+  const items = wallItems.filter(w => (wallFilter === 'all' || w.cat === wallFilter) && (!q || w.name.toLowerCase().indexOf(q) !== -1));
+  n.textContent = items.length + (items.length === 1 ? ' bottle' : ' bottles') + (SAMPLE_WALL ? ' (sample labels)' : '');
+  g.innerHTML = items.length
+    ? items.map(w => '<div class="cell">' + labelHTML(CATS.find(x => x.id === w.cat), w.a, {name:w.name, compact:true, wall:true}) + '</div>').join('')
+    : '<p class="empty">No bottles match yet. Try another name or label, or make the first one.</p>';
+}
+
+function resetAll(){
+  S.cat = null; S.step = 0; S.a = {}; S.own = {}; S.adding = false; S.just = null;
+  S.done = null;
+}
+
+function share(){
+  const d = S.done; if (!d || !navigator.share) return;
+  const data = {title:'My bottle at The People’s Wine Cellar', text:(d.title ? cap(d.title) + ' ' : '') + '#EveryBottleTellsAStory'};
+  if (location.protocol.indexOf('http') === 0) data.url = location.origin + location.pathname;
+  navigator.share(data).catch(() => {});
+}
+
+/* ---------- events ---------- */
+app.addEventListener('click', e => {
+  const t = e.target.closest('[data-act]'); if (!t || t.disabled) return;
+  const act = t.dataset.act;
+  if (['chip', 'surprise', 'addOwn'].indexOf(act) === -1) clearTimeout(timer);
+  switch (act) {
+    case 'pickCat': S.cat = t.dataset.id; S.step = 0; S.a = {}; S.own = {}; S.adding = false; go('build'); break;
+    case 'back':
+      if (S.screen === 'finish') { S.step = cat().prompts.length - 1; S.adding = false; go('build'); }
+      else if (S.step > 0) { S.step--; S.adding = false; S.just = null; renderBuild(); }
+      else go('home');
+      break;
+    case 'goStep': S.step = +t.dataset.i; S.adding = false; S.just = null; renderBuild(); break;
+    case 'finish': go('finish'); break;
+    case 'chip': apply(t.dataset.v, false); break;
+    case 'surprise': { const ch = cat().prompts[S.step].chips; apply(ch[Math.floor(Math.random() * ch.length)], false); break; }
+    case 'own': S.adding = !S.adding; renderBuild(); break;
+    case 'addOwn': { const f = document.getElementById('ownText'), v = f ? f.value.trim() : ''; if (v) apply(v, true); break; }
+    case 'skip': S.adding = false; next(); break;
+    case 'handoff': handoff(); break;
+    case 'wall': go('wall'); break;
+    case 'filter': wallFilter = t.dataset.id; paintWall(); break;
+    case 'home': go('home'); break;
+    case 'again': resetAll(); go('home'); break;
+    case 'share': share(); break;
+  }
+});
+
+app.addEventListener('input', e => {
+  if (e.target.id === 'q') { wallQuery = e.target.value; paintWall(); }
+});
+
+app.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.id === 'ownText') { e.preventDefault(); const v = e.target.value.trim(); if (v) apply(v, true); }
+});
+
+/* ---------- start ---------- */
+if (location.hash === '#wall') S.screen = 'wall';
+else if (location.hash === '#thanks') {
+  try { const saved = sessionStorage.getItem('pwc_last'); if (saved) S.done = JSON.parse(saved); } catch (e) {}
+  S.screen = 'done';
+}
+render();
+})();
+</script>
+</body>
+</html>
